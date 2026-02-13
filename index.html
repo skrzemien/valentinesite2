@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walentynka</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* Zmiana na min-height, żeby gif nie ucinał się na małych ekranach */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Zapobiega paskom przewijania na boki */
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 10;
+            position: relative;
+            max-width: 90%; /* Żeby nie było za szerokie na telefonie */
+        }
+
+        h1 {
+            color: #d63384;
+            margin-bottom: 30px;
+            font-size: 2rem; /* Trochę mniejsza czcionka dla lepszej responsywności */
+        }
+
+        /* Kontener na przyciski */
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+            font-weight: bold;
+            background-color: #ff4d6d;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Stylizacja GIFa */
+        #gif-container {
+            display: none; /* Początkowo ukryty */
+            margin-top: 20px;
+        }
+        
+        #gif-container img {
+            max-width: 100%; /* Responsywność */
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 300px; /* Ograniczenie wysokości */
+        }
+
+        /* Animacja serduszek (bez zmian) */
+        .heart {
+            position: absolute;
+            top: -20px;
+            font-size: 24px;
+            color: #ff4d6d;
+            animation: fall linear forwards;
+            z-index: 1;
+            pointer-events: none; /* Żeby nie blokowały kliknięć */
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="question">Czy zostaniesz moją walentynką?</h1>
+        
+        <div class="buttons-container" id="btns">
+            <button onclick="sayYes()">Tak</button>
+            <button onclick="sayYes()">Tak</button>
+        </div>
+
+        <div id="gif-container">
+            <img id="cat-gif" alt="Słodki kotek">
+        </div>
+    </div>
+
+    <script>
+        function sayYes() {
+            // 1. Zmień tekst pytania
+            const question = document.getElementById('question');
+            question.innerText = "Jej! Wiedziałem/am, że się zgodzisz! ❤️";
+            
+            // 2. Ukryj przyciski
+            document.getElementById('btns').style.display = 'none';
+
+            // 3. Pokaż GIFa
+            const gifContainer = document.getElementById('gif-container');
+            const catImg = document.getElementById('cat-gif');
+            // Ustawiamy źródło obrazka dopiero po kliknięciu (oszczędność transferu na start)
+            // Używam tu popularnego, bezpiecznego linku do GIFa z Giphy
+            catImg.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3I4aTJ2aWx6a214a214a214a214a214a214a214a214a214a214cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif";
+            gifContainer.style.display = 'block';
+
+            // 4. Uruchom lawinę serduszek
+            startHeartRain();
+        }
+
+        function startHeartRain() {
+            const heartEmojis = ['❤️', '💖', '💕', '🥰', '😍', '😻']; // Dodałem kota z sercami
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = Math.random() * 20 + 20 + "px";
+                const duration = Math.random() * 3 + 2;
+                heart.style.animationDuration = duration + "s";
+                
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+
+            }, 100); // Zwiększyłem lekko interwał (mniej serduszek na sekundę), żeby nie zasłoniły GIFa zbyt szybko
+        }
+    </script>
+</body>
+</html>
